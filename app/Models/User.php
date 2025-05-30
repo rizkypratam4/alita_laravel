@@ -75,4 +75,9 @@ class User extends Authenticatable
     public function area() {
         return $this->belongsTo(Area::class, 'area_id');
     }
+    
+    public function assetMutations()
+    {
+        return $this->hasMany(AssetMutation::class);
+    }
 }

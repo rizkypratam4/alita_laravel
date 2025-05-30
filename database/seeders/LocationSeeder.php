@@ -2,46 +2,56 @@
 
 namespace Database\Seeders;
 
-use App\Models\Type;
+use App\Models\Location;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TypeSeeder extends Seeder
+class LocationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Type::insert([
+         Location::insert([
             [
-                'name' => 'SEWA GEDUNG',
+                'name' => 'KAWAT/PER',
                 'creator_id' => 2,
                 'created_at' => now(),
             ],
             [
-                'name' => 'MESIN PRODUKSI',
+                'name' => 'AREA FINISH GOOD',
                 'creator_id' => 2,
                 'created_at' => now(),
             ],
             [
-                'name' => 'FINGERPRINT',
+                'name' => 'RUANGAN ICU',
+                'creator_id' => 2,
+                'created_at' => now(),
+                
+            ],
+            [
+                'name' => 'AREA BORDER',
+                'creator_id' => 2,
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'AREA QUILTING',
                 'creator_id' => 2,
                 'created_at' => now(),
                 
             ],
             [
-                'name' => 'CCTV',
+                'name' => 'AREA JAHIT',
                 'creator_id' => 2,
                 'created_at' => now(),
             ],
             [
-                'name' => 'APAR FOAM',
+                'name' => 'AREA JAHIT ATAS',
                 'creator_id' => 2,
                 'created_at' => now(),
                 
             ],
-            
         ]);
     }
 }

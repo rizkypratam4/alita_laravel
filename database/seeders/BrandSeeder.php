@@ -75,6 +75,12 @@ class BrandSeeder extends Seeder
                 'created_at' => now(),
                 
             ],
+            [
+                'name' => 'FOSHAN YUANTIAN',
+                'creator_id' => 2,
+                'created_at' => now(),
+                
+            ],
         ]);
     }
 }

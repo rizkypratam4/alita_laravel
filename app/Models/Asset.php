@@ -28,6 +28,7 @@ class Asset extends Model
         'creator_id', 
         'updater_id'
     ];
+    
 
     protected static function booted(){
         static::creating(function ($model) {
@@ -36,25 +37,41 @@ class Asset extends Model
         });
     }
 
+    public function latestMutation()
+    {
+        return $this->hasOne(AssetMutation::class)->latestOfMany();
+    }
+
+    public function machineSpecifications()
+    {
+        return $this->hasMany(MachineSpecification::class);
+    }
+
+    public function assetMutations()
+    {
+        return $this->hasMany(AssetMutation::class);
+    }
+
     public function departement() {
-        return $this->belongsTo(Departement::class, 'departement_id');
+        return $this->belongsTo(Departement::class);
     }
 
     public function category() {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
     public function type() {
-        return $this->belongsTo(Type::class, 'type_id');
+        return $this->belongsTo(Type::class);
     }
 
     public function brand() {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Brand::class);
     }
 
     public function workPlace() {
-        return $this->belongsTo(WorkPlace::class, 'work_place_id');
+        return $this->belongsTo(WorkPlace::class);
     }
+
 
     public function creator() {
         return $this->belongsTo(User::class, 'creator_id');

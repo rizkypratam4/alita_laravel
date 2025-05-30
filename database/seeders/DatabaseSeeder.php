@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             DivisionSeeder::class,
             CategorySeeder::class,
             TypeSeeder::class,
+            WorkPlaceSeeder::class,
+            BrandSeeder::class,
+            MaintenanceSeeder::class,
+            LocationSeeder::class
         ]);
     }
 }

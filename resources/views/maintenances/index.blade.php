@@ -20,13 +20,13 @@
       width: 14px;
       height: 14px;
     }
-  </style>
+</style>
   
   <x-layout>
     <div class="d-flex align-items-center justify-content-between">
       <x-breadcrumb :title="'Maintenance assets'" />
       <a class="" href="{{ route('maintenances.create') }}" style="color: black; text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">
-        <i class="fas fa-plus-circle"></i> New work place
+        <i class="fas fa-plus-circle"></i> New asset
       </a>
     </div>
     
@@ -37,7 +37,7 @@
               <div class="card-header">
                 <h5>Search Asset</h5>
               </div>
-              <form method="GET" action="{{ route('work_places.index') }}">
+              <form method="GET" action="{{ route('maintenances.index') }}">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-4">
@@ -139,8 +139,8 @@
                 </div>
               </div>
               <div class="card-body">
-                <div id="location-results">
-                  
+                <div id="maintenance-results">
+                   @include('maintenances._table')
                 </div>
               </div>
             </div>

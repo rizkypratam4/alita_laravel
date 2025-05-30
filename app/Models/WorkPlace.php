@@ -38,6 +38,12 @@ class WorkPlace extends Model
     {
         return $this->hasMany(Asset::class, 'work_place_id');
     }
+
+    public function assetMutations()
+    {
+        return $this->hasMany(AssetMutation::class);
+    }
+
     
     public function area()
     {

@@ -9,7 +9,7 @@
     <div class="col-md-6">
         <label for="formGroupExampleInput" class="form-label">Nama asset</label>
         <input type="text" class="form-control mb-3" name="name" aria-label="First name" 
-            value="{{ old('name', $asset->name ?? '') }}">
+            value="{{ old('name', $maintenance->name ?? '') }}">
         @error('name')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -18,7 +18,7 @@
     <div class="col-md-6">
         <label for="formGroupExampleInput" class="form-label">Tanggal perolehan</label>
         <input type="date" class="form-control mb-3" name="tanggal_perolehan" aria-label="First name" 
-            value="{{ old('tanggal_perolehan', $asset->name ?? '') }}">
+            value="{{ old('tanggal_perolehan', $maintenance->tanggal_perolehan ?? '') }}">
         @error('tanggal_perolehan')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -27,7 +27,7 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Supplier</label>
         <input type="text" class="form-control mb-3" name="supplier" aria-label="First name"
-            value="{{ old('supplier', $asset->supplier ?? '') }}">
+            value="{{ old('supplier', $maintenance->supplier ?? '') }}">
         @error('supplier')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -36,7 +36,7 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Serial number</label>
         <input type="text" class="form-control mb-3" name="serial_number" aria-label="First name" 
-            value="{{ old('serial_number', $asset->serial_number ?? '') }}">
+            value="{{ old('serial_number', $maintenance->serial_number ?? '') }}">
         @error('serial_number')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -45,7 +45,7 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Kode Asset</label>
         <input type="text" class="form-control mb-3" name="kode_asset" aria-label="First name" 
-            value="{{ old('kode_asset', $asset->kode_asset ?? '') }}">
+            value="{{ old('kode_asset', $maintenance->kode_asset ?? '') }}">
         @error('kode_asset')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -54,7 +54,7 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Harga</label>
         <input type="text" class="form-control mb-3" name="harga" aria-label="First name" 
-            value="{{ old('harga', $asset->harga ?? '') }}">
+            value="{{ old('harga', $maintenance->harga ?? '') }}">
         @error('harga')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -63,7 +63,7 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Capacity</label>
         <input type="text" class="form-control mb-3" name="kapasitas" aria-label="First name" 
-            value="{{ old('kapasitas', $asset->kapasitas ?? '') }}">
+            value="{{ old('kapasitas', $maintenance->kapasitas ?? '') }}">
         @error('kapasitas')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -72,12 +72,12 @@
     <div class="col-md-4">
         <label for="formGroupExampleInput" class="form-label">Brand</label>
         <select id="selectBrands" name="brand_id" class="form-select mb-3" 
-            value="{{ old('brand_id', $asset->brand_id ?? '') }}">
+            value="{{ old('brand_id', $maintenance->brand_id ?? '') }}">
           <option value=""></option>
           @foreach($brands as $brand)
               <option value="{{ $brand->id }}" 
-                    @if(old('brand_id', $asset->brand_id ?? '') == $brand->id) selected @endif>
-                    {{ $brand->name }}
+                @if(old('brand_id', $maintenance->brand_id ?? '') == $brand->id) selected @endif>
+                {{ $brand->name }}
               </option>
           @endforeach
         </select>
@@ -92,7 +92,7 @@
           <option value=""></option>
           @foreach($workPlaces as $workPlace)
               <option value="{{ $workPlace->id }}" 
-                @if(old('work_place_id', $asset->work_place_id ?? '') == $workPlace->id) selected @endif>
+                @if(old('work_place_id', $maintenance->work_place_id ?? '') == $workPlace->id) selected @endif>
                 {{ $workPlace->name }}
               </option>
           @endforeach
@@ -108,7 +108,7 @@
           <option value=""></option>
           @foreach($categories as $category)
               <option value="{{ $category->id }}" 
-                @if(old('category_id', $asset->category_id ?? '') == $category->id) selected @endif>
+                @if(old('category_id', $maintenance->category_id ?? '') == $category->id) selected @endif>
                 {{ $category->name }}
               </option>
           @endforeach
@@ -124,7 +124,7 @@
           <option value=""></option>
           @foreach($types as $type)
               <option value="{{ $type->id }}" 
-                    @if(old('type_id', $asset->type_id ?? '') == $type->id) selected @endif>
+                  @if(old('type_id', $maintenance->type_id ?? '') == $type->id) selected @endif>
                   {{ $type->name }}
               </option>
           @endforeach
@@ -137,7 +137,7 @@
     <div class="mb-2">
         <label for="inputKeterangan" class="form-label">Keterangan</label>
         <textarea class="form-control" name="keterangan" id="inputKeterangan" style="height: 100px;" 
-            value="{{ old('keterangan', $asset->keterangan ?? '') }}"></textarea>
+            value="{{ old('keterangan', $maintenance->keterangan ?? '') }}"></textarea>
         @error('keterangan')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror
@@ -145,7 +145,7 @@
 
     <div class="col-md-6">
         <input type="file" name="image" class="form-control form-control-sm" id="inputWorkPlaceImage" 
-            value="{{ old('image', $asset->image ?? '') }}">
+            value="{{ old('image', $maintenance->image ?? '') }}">
         @error('image')
             <div class="text-danger mt-2">{{ $message }}</div>
         @enderror

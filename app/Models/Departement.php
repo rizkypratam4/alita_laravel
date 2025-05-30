@@ -23,7 +23,12 @@ class Departement extends Model
     {
         return $this->hasMany(Asset::class);
     }
-    
+
+    public function assetMutations()
+    {
+        return $this->hasMany(AssetMutation::class);
+    }
+
     public function users()
     {
         return $this->hasMany(WorkPlace::class);
