@@ -58,6 +58,5 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/maintenances/{id}/mutasi_asset/edit', [MaintenanceController::class, 'editMutation'])->name('maintenances.edit.mutation');
     Route::put('/maintenances/{id}/mutasi_asset/edit', [MaintenanceController::class, 'updateMutation'])->name('maintenances.update.mutation');
     Route::get('/maintenances/{id}/qrcode', [MaintenanceController::class, 'showQrcode'])->name('maintenances.qrcode');
-    Route::get('/maintenances/{id}/qrcode', [MaintenanceController::class, 'showQrcode'])->name('maintenances.qrcode');
     Route::get('/maintenances/{id}/download-qrcode', [MaintenanceController::class, 'downloadQrCode'])->name('maintenances.download_qrcode');
 });

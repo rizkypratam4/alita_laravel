@@ -20,6 +20,8 @@ use App\Http\Requests\AssetMutationRequest;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\MachineSpecificationRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
+   use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class MaintenanceController extends Controller
 {
@@ -284,41 +286,52 @@ class MaintenanceController extends Controller
     {
         $maintenance = Asset::find($id);
 
-        if (!$maintenance){
+        if (!$maintenance) {
             return redirect()->route('maintenances.index')
-                             ->with('error', 'Kode asset tidak ditemukan');
+                            ->with('error', 'Kode asset tidak ditemukan');
         }
 
-        $qrData = route('maintenances.show', $maintenance->id);
-        $qrCode = QrCode::size(200)->generate($qrData);
+        // Generate QR Code data - you can customize this URL based on your needs
+        $qrCodeData = url("/maintenances/{$maintenance->id}");
+        
+        // Alternative: you can also use route name
+        // $qrCodeData = route('maintenances.show', $maintenance->id);
+        
+        // Generate QR code as SVG for display
+        $qrCode = QrCode::size(200)
+                        ->margin(2)
+                        ->format('svg')
+                        ->generate($qrCodeData);
 
         return view('maintenances.qrcode', compact('maintenance', 'qrCode'));
     }
 
+    public function downloadQrCode($id)
+    {
+        $maintenance = Asset::find($id);
 
+        if (!$maintenance) {
+            return redirect()->route('maintenances.index')
+                            ->with('error', 'Kode asset tidak ditemukan');
+        }
+        
+        $qrCodeData = url("/maintenances/{$maintenance->id}");
+        // Generate PNG base64 image string:
+        $qrCodeImage = base64_encode(QrCode::format('png')->size(200)->margin(0)->generate($qrCodeData));
+        
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
 
-   public function downloadQrCode($id)
-{
-    $asset = Asset::findOrFail($id);
-    
-    // Data yang akan dikodekan dalam QR (kode asset saja)
-    $qrData = $asset->kode_asset;
-    
-    // Generate QR code
-    $qrCode = QrCode::format('svg')
-        ->size(100)
-        ->generate($qrData);
-    
-    // Load view PDF dengan data asset dan QR code
-    $pdf = Pdf::loadView('pdf.asset_qrcode', [
-        'asset' => $asset,
-        'qrCode' => $qrCode,
-        'description' => 'MESIN GILING BUSA' // Teks deskripsi
-    ])->setPaper([0, 0, 226.8, 141.75], 'portrait'); // 8x5 cm
-    
-    return $pdf->download('qrcode_' . $asset->kode_asset . '.pdf');
-}
+        $html = view('pdf.qrcode-pdf', compact('maintenance', 'qrCodeImage'))->render();
+        
+        $dompdf->loadHtml($html);
+        
+        // Paper width 5cm (about 141.7 points) x height 8cm (about 226.77 points)
+        $dompdf->setPaper([0, 0, 141.73, 226.77], 'landscape'); // 5cm x 8cm
+        $dompdf->render();
 
-
+        return $dompdf->stream("qrcode_asset_{$maintenance->kode_asset}.pdf", ['Attachment' => true]);
+    }
 
 }
