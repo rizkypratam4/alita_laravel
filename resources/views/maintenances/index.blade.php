@@ -47,15 +47,15 @@
                     </div>
 
                     <div class="col-4">
-                      <label for="formGroupExampleInput" class="form-label">Tanggal perolehan</label>
-                      <input type="text" class="form-control mb-3" name="filter[tanggal_perolehan]" value="{{ request('filter.tanggal_perolehan') }}" 
-                      placeholder="Search tanggal perolehan" aria-label="tanggal perolehan">
-                    </div>
-
-                    <div class="col-4">
                       <label for="formGroupExampleInput" class="form-label">Serial number</label>
                       <input type="text" class="form-control mb-3" name="filter[serial_number]" value="{{ request('filter.serial_number') }}" 
                       placeholder="Search serial number" aria-label="serial number">
+                    </div>
+
+                    <div class="col-4">
+                      <label for="formGroupExampleInput" class="form-label">Tanggal perolehan</label>
+                      <input type="date" class="form-control mb-3" name="filter[tanggal_perolehan]" value="{{ request('filter.tanggal_perolehan') }}" 
+                      placeholder="Search tanggal perolehan" aria-label="tanggal perolehan">
                     </div>
 
                     <div class="col-4">
@@ -133,10 +133,6 @@
             <div class="card">
               <div class="card-header d-flex justify-content-between">
                 <h5 class="align-self-center">All Asset</h5>
-                <div class="search-box">
-                  <i data-feather="search" class="search-icon me-2"></i>
-                  <input location="text" id="search-locations" class="form-control form-control-sm" placeholder="Search...">
-                </div>
               </div>
               <div class="card-body">
                 <div id="maintenance-results">

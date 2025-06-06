@@ -20,7 +20,7 @@
             <th class="text-nowrap">Updated at</th>
             <th class="text-nowrap">Updater</th>
             <th class="text-nowrap">Keterangan</th>
-            <th class="text-center" colspan="3">Action</th>
+            <th class="text-center" colspan="4">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -86,10 +86,9 @@
 
             <td>
                 <a class="dropdown-item" href="{{ route('maintenances.qrcode', $maintenance->id) }}">
-                <i class="fa fa-plus-circle"></i> Qrcode
-            </a>
+                    <i class="fa fa-qrcode"></i> Qrcode
+                </a>
             </td>
-
             </tr>
         @empty
             <tr><td colspan="6" class="text-center">No results found.</td></tr>  

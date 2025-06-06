@@ -20,14 +20,31 @@ use App\Http\Requests\AssetMutationRequest;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\MachineSpecificationRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
-   use Dompdf\Dompdf;
+use Dompdf\Dompdf;
 use Dompdf\Options;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MaintenanceController extends Controller
 {
     public function index() {
 
-        $maintenances = Asset::with('workPlace', 'category', 'type', 'brand', 'departement')->latest()->paginate(5);
+        $maintenances = QueryBuilder::for(Asset::with('workPlace', 'category', 'type', 'brand', 'departement'))
+            ->allowedFilters([
+                AllowedFilter::partial('name'),
+                AllowedFilter::partial('serial_number'),
+                AllowedFilter::exact('tanggal_perolehan'),
+                AllowedFilter::partial('kode_asset'),
+                AllowedFilter::partial('supplier'),
+                AllowedFilter::exact('brand_id'),
+                AllowedFilter::exact('work_place_id'),
+                AllowedFilter::exact('category_id'),
+                AllowedFilter::exact('type_id'),
+            ])
+            ->latest()
+            ->paginate(5)
+            ->appends(request()->query());
+        
         $workPlaces = WorkPlace::all();
         $categories = Category::all();
         $types = Type::all();

@@ -59,15 +59,6 @@
 
 <x-layout>
     <x-breadcrumb title="QR Code Asset" />
-
-    <div class="header">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item text-white">{{ __('Home / Asset / QR Code') }}</li>
-            </ol>
-        </nav>
-    </div>
-
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">
@@ -113,11 +104,11 @@
                                         <span class="text-dark">{{ $maintenance->location }}</span>
                                     </li>
                                     @endif
-                                    @if(isset($maintenance->status))
+                                    @if(isset($maintenance->serial_number))
                                     <li>
-                                        <strong>Status:</strong> 
-                                        <span class="badge bg-{{ $maintenance->status == 'active' ? 'success' : 'warning' }}">
-                                            {{ ucfirst($maintenance->status) }}
+                                        <strong>Serial number:</strong> 
+                                        <span class="badge bg-{{ $maintenance->serial_number == 'active' ? 'success' : 'warning' }}">
+                                            {{ ucfirst($maintenance->serial_number) }}
                                         </span>
                                     </li>
                                     @endif
@@ -126,26 +117,13 @@
                                 <div class="mt-4">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('maintenances.download_qrcode', $maintenance->id) }}" 
-                                           class="btn btn-danger">
-                                            <i class="fas fa-download me-1"></i> 
-                                            Download QR Code
+                                        class="btn btn-danger" 
+                                        title="Download PDF">
+                                            <i class="fas fa-file-pdf me-1"></i> Download PDF
                                         </a>
-                                        <button type="button" class="btn btn-success" onclick="printQrCode()">
-                                            <i class="fas fa-print me-1"></i> 
-                                            Print
-                                        </button>
-                                        <button type="button" class="btn btn-info" onclick="shareQrCode()">
-                                            <i class="fas fa-share me-1"></i> 
-                                            Share
-                                        </button>
                                     </div>
                                 </div>
-                                <div class="mt-3">
-                                    <a href="{{ route('maintenances.index') }}" class="btn btn-outline-secondary">
-                                        <i class="fas fa-arrow-left me-1"></i> 
-                                        Kembali ke Daftar Asset
-                                    </a>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -153,98 +131,4 @@
             </div>
         </div>
     </div>
-
-    {{-- Print Modal --}}
-    <div class="modal fade" id="printModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-print me-2"></i>
-                        Print QR Code
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center" id="printContent">
-                    <div class="print-header mb-4">
-                        <h3>{{ $maintenance->kode_asset }}</h3>
-                        <h4>{{ strtoupper($maintenance->name) }}</h4>
-                        @if($maintenance->keterangan)
-                        <p class="text-muted">{{ $maintenance->keterangan }}</p>
-                        @endif
-                    </div>
-                    <div class="qr-print-container mb-4">
-                        {!! $qrCode !!}
-                    </div>
-                    <div class="print-footer">
-                        <p><strong>Kode Asset:</strong> {{ $maintenance->kode_asset }}</p>
-                        <p><small>Generated on: {{ date('d-m-Y H:i:s') }}</small></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="doPrint()">
-                        <i class="fas fa-print me-1"></i>
-                        Print
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-    <script>
-    function printQrCode() {
-        $('#printModal').modal('show');
-    }
-
-    function doPrint() {
-        window.print();
-    }
-
-    function shareQrCode() {
-        if (navigator.share) {
-            navigator.share({
-                title: 'QR Code Asset - {{ $maintenance->kode_asset }}',
-                text: 'QR Code untuk asset {{ $maintenance->name }}',
-                url: window.location.href
-            });
-        } else {
-            // Fallback - copy to clipboard
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Link QR Code berhasil disalin ke clipboard!');
-            }).catch(() => {
-                alert('Tidak dapat menyalin link. URL: ' + url);
-            });
-        }
-    }
-
-    // Print styles
-    const printStyles = `
-        @media print {
-            body * { visibility: hidden; }
-            #printContent, #printContent * { visibility: visible; }
-            #printContent {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .qr-print-container svg {
-                width: 200px !important;
-                height: 200px !important;
-            }
-        }
-    `;
-    
-    // Add print styles to head
-    const styleSheet = document.createElement("style");
-    styleSheet.innerText = printStyles;
-    document.head.appendChild(styleSheet);
-    </script>
-    
-
 </x-layout>
