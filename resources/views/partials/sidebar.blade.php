@@ -78,9 +78,9 @@
           menuTitle="Production" 
           menuIcon="ti ti-layout" 
           :submenu="[
-              ['text' => 'FG Schedule', 'url' => '#brands'],
-              ['text' => 'WIP Schedule', 'url' => '#categories'],
-              ['text' => 'Operators', 'url' => '#operators'],
+              ['text' => 'FG Schedule', 'url' => '/finish_good_schedules'],
+              ['text' => 'WIP Schedule', 'url' => '/wip_schedules'],
+              ['text' => 'Operators', 'url' => '/operators'],
               ['text' => 'Report', 'url' => '#report']
           ]" 
           />

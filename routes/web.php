@@ -9,10 +9,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkPlaceController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\FinishGoodScheduleController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\WipScheduleController;
 
 # auth
 Route::get('/', [AuthenticationController::class, 'index'])->name('login');
@@ -26,6 +28,8 @@ Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.s
 Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
 Route::get('/types/search', [TypeController::class, 'search'])->name('types.search');
 Route::get('/locations/search', [LocationController::class, 'search'])->name('locations.search');
+Route::get('/finish_good_schedules/search', [FinishGoodScheduleController::class, 'search'])->name('finish-good.search');
+Route::get('/wip_schedules/search', [FinishGoodScheduleController::class, 'search'])->name('wip.search');
 
 # page
 Route::middleware(['auth', 'auth.session'])->group(function () {
@@ -43,16 +47,19 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         'locations' => LocationController::class,
         'maintenances' => MaintenanceController::class,
         'profiles' => ProfileController::class,
+        'finish_good_schedules' => FinishGoodScheduleController::class,
+        'wip_schedules' => WipScheduleController::class
     ]);
 
+    # profile
     Route::get('/profiles/{profile}/edit-info', [ProfileController::class, 'editInfo'])->name('profiles.edit.info');
     Route::get('/profiles/{profile}/edit-work', [ProfileController::class, 'editWork'])->name('profiles.edit.work');
     Route::put('/profiles/{profile}/work', [ProfileController::class, 'updateWorkExperience'])->name('profiles.update.work');
     Route::put('/profiles/{profile}/info', [ProfileController::class, 'updateUserInfo'])->name('profiles.update.info');
 
+    # maintenance
     Route::get('/maintenances/{id}/specification', [MaintenanceController::class, 'specification'])->name('maintenances.specification');
     Route::post('/maintenances/{id}/specification', [MaintenanceController::class, 'createSpecification'])->name('maintenances.create.specification');
-
     Route::get('/maintenances/{id}/mutasi_asset/new', [MaintenanceController::class, 'assetMutation'])->name('maintenances.asset.mutation');
     Route::post('/maintenances/{id}/mutasi_asset/new', [MaintenanceController::class, 'storeMutation'])->name('maintenances.store.mutation');
     Route::get('/maintenances/{id}/mutasi_asset/edit', [MaintenanceController::class, 'editMutation'])->name('maintenances.edit.mutation');

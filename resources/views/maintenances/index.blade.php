@@ -23,14 +23,14 @@
 </style>
   
   <x-layout>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mt-2">
       <x-breadcrumb :title="'Maintenance assets'" />
       <a class="" href="{{ route('maintenances.create') }}" style="color: black; text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">
         <i class="fas fa-plus-circle"></i> New asset
       </a>
     </div>
     
-      <div class="row">
+      <div class="row mt-3">
           <!-- [ maintenance-page ] start -->
           <div class="col-sm-12">
             <div class="card">
