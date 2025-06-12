@@ -1,0 +1,78 @@
+<x-layout>
+    <x-breadcrumb :title="'Operator Produksi'" />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-3">Operator Produksi</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-nowrap">No</th>
+                                    <th scope="col" class="text-nowrap">Nama Barang 1</th>
+                                    <th scope="col" class="text-nowrap">Nama Barang 2</th>
+                                    <th scope="col" class="text-nowrap">Jam Upload</th>
+                                    <th scope="col" class="text-nowrap">Priority</th>
+                                    <th scope="col" class="text-nowrap text-center" colspan="2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($operators as $index => $operator)
+                                    <tr>
+                                        <td class="text-center" style="width: 2%; white-space: nowrap;">
+                                            {{ $loop->iteration + ($operators->currentPage() - 1) * $operators->perPage() }}
+                                        </td>
+                                        <td>{{ $operator->finishGoodSchedule->name ?? '-' }}</td>
+                                        <td>{{ $operator->finishGoodSchedule->keterangan ?? '-' }}</td>
+                                        <td>
+                                            {{ optional($operator->finishGoodSchedule->created_at)->format('H:i:s') ?? '-' }}
+                                        </td>
+                                        <td>
+                                            @php
+                                                $priorityText = [
+                                                    1 => 'Top Urgent',
+                                                    2 => 'Urgent',
+                                                    3 => 'Normal',
+                                                    4 => 'Luar Kota',
+                                                    5 => 'Perorangan'
+                                                ];
+                                            @endphp
+                                            {{ $priorityText[$operator->finishGoodSchedule->priority] ?? 'Tidak Diketahui' }}
+                                        </td>
+                                        <td class="d-flex justify-content-center gap-2">
+                                            <form method="POST" action="{{ route('operators.markComplete', $operator->id) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-check-circle me-1"></i> Selesai
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('operators.markPending', $operator->id) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-warning">
+                                                    <i class="fa fa-clock me-1"></i> Pending
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <div class="pagination-sm ms-auto mt-2">
+                            {{ $operators->links('pagination::bootstrap-5') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-layout>

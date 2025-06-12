@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->integer('priority');
             $table->string('kategori');
-            $table->boolean('schedule_status');
+            $table->boolean('schedule_status')->nullable();
             $table->unsignedBigInteger('creator_id')->nullable();
             $table->unsignedBigInteger('updater_id')->nullable();
             

@@ -9,10 +9,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkPlaceController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\BorderController;
 use App\Http\Controllers\FinishGoodScheduleController;
+use App\Http\Controllers\GussetController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\MattrasController;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\PanelController;
+use App\Http\Controllers\PocketController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RamController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\WipScheduleController;
 
@@ -28,7 +35,7 @@ Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.s
 Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
 Route::get('/types/search', [TypeController::class, 'search'])->name('types.search');
 Route::get('/locations/search', [LocationController::class, 'search'])->name('locations.search');
-Route::get('/finish_good_schedules/search', [FinishGoodScheduleController::class, 'search'])->name('finish-good.search');
+Route::get('/finish_good_schedules/search', [FinishGoodScheduleController::class, 'search'])->name('finish_good_schedules.search');
 Route::get('/wip_schedules/search', [FinishGoodScheduleController::class, 'search'])->name('wip.search');
 
 # page
@@ -47,8 +54,13 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         'locations' => LocationController::class,
         'maintenances' => MaintenanceController::class,
         'profiles' => ProfileController::class,
-        'finish_good_schedules' => FinishGoodScheduleController::class,
-        'wip_schedules' => WipScheduleController::class
+        'operators' => OperatorController::class,
+        'mattras' => MattrasController::class,
+        'border' => BorderController::class,
+        'gusset' => GussetController::class,
+        'panel' => PanelController::class,
+        'pocket' => PocketController::class,
+        'ram' => RamController::class,
     ]);
 
     # profile
@@ -66,4 +78,21 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::put('/maintenances/{id}/mutasi_asset/edit', [MaintenanceController::class, 'updateMutation'])->name('maintenances.update.mutation');
     Route::get('/maintenances/{id}/qrcode', [MaintenanceController::class, 'showQrcode'])->name('maintenances.qrcode');
     Route::get('/maintenances/{id}/download-qrcode', [MaintenanceController::class, 'downloadQrCode'])->name('maintenances.download_qrcode');
+
+    # finish good
+    Route::resource('finish_good_schedules', FinishGoodScheduleController::class)->except(['destroy']);
+    Route::post('/finish_good_schedules/import', [FinishGoodScheduleController::class, 'import'])->name('finish_good_schedules.import');
+    Route::post('/finish_good_schedules/clear-all', [FinishGoodScheduleController::class, 'clearAll'])->name('finish_good_schedules.clearAll');
+    Route::delete('/finish_good_schedules/delete-selected', [FinishGoodScheduleController::class, 'deleteSelected'])->name('finish_good_schedules.delete-selected');
+
+    # wip schedule
+    Route::resource('wip_schedules', WipScheduleController::class)->except(['destroy']);
+    Route::post('/wip_schedules/import', [WipScheduleController::class, 'import'])->name('wip_schedules.import');
+    Route::post('/wip_schedules/clear-all', [WipScheduleController::class, 'clearAll'])->name('wip_schedules.clearAll');
+    Route::delete('/wip_schedules/delete-selected', [WipScheduleController::class, 'deleteSelected'])->name('wip_schedules.delete-selected');
+
+    Route::patch('/operators/{operator}/complete', [MattrasController::class, 'markComplete'])->name('operators.markComplete');
+    Route::patch('/operators/{operator}/pending', [MattrasController::class, 'markPending'])->name('operators.markPending');
+
+
 });
