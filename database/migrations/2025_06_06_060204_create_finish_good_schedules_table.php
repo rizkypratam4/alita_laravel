@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('finish_good_schedules', function (Blueprint $table) {
             $table->id();
-            $table->integer('item_number');
+            $table->bigInteger('item_number');
             $table->string('name');
             $table->string('keterangan');
             $table->integer('quantity');
             $table->integer('priority');
-            $table->boolean('schedule_status');
+            $table->boolean('schedule_status')->nullable();
 
             $table->unsignedBigInteger('creator_id')->nullable();
             $table->unsignedBigInteger('updater_id')->nullable();

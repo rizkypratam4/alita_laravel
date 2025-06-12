@@ -20,7 +20,7 @@
       width: 14px;
       height: 14px;
     }
-  </style>
+</style>
   
   <x-layout>
     <x-breadcrumb :title="'Wip Schedule'" />

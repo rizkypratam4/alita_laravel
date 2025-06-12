@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('operators', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('finish_good_schedule_id')->constrained()->onDelete('cascade');
-            $table->foreignId('wip_schedule_id')->constrained()->onDelete('cascade');
+            $table->foreignId('finish_good_schedule_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('wip_schedule_id')->nullable()->constrained()->onDelete('cascade');
             $table->boolean('status_production')->nullable();
             $table->date('tanggal_selesai')->nullable();
             $table->time('waktu_selesai')->nullable();
