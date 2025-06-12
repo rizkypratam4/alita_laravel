@@ -7,42 +7,42 @@ use App\Models\WipSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\WipScheduleRequest;
 
 class WipScheduleController extends Controller
 {
-     public function index()
+    public function index()
     {
-        $finish_good_schedules = WipSchedule::whereNull('schedule_status')
+        $wip_schedules = WipSchedule::whereNull('schedule_status')
                                 ->orderBy('priority', 'asc')
                                 ->paginate(10);
 
-        return view('finish_good_schedules.index', compact('finish_good_schedules'));
-
+        return view('wip_schedules.index', compact('wip_schedules'));
     }
 
     public function create()
     {
-        return view('finish_good_schedules.new', ['title' => 'Finish Good']);
+        return view('wip_schedules.new', ['title' => 'Finish Good']);
     }
-
 
     public function store(WipScheduleRequest $request)
     {
         try {
             $validated = $request->validated();
-            $finishGood = WipSchedule::create($validated);
+            $wip = WipSchedule::create($validated);
 
-            for ($i = 0; $i < $finishGood->quantity; $i++) {
+            for ($i = 0; $i < $wip->qty; $i++) {
                 Operator::create([
-                    'finish_good_schedule_id' => $finishGood->id,
+                    'wip_schedule_id' => $wip->id,
                 ]);
             }
 
-            return redirect()->route('finish_good_schedules.index')
+            return redirect()->route('wip_schedules.index')
                             ->with('success', 'Data berhasil disimpan dan operator telah dibuat.');
         } catch (\Exception $e) {
             return back()->withInput()
-                        ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
+                         ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
         }
     }
 
@@ -66,17 +66,16 @@ class WipScheduleController extends Controller
 
                 $cleaned = collect($row)->map(fn($v) => is_string($v) ? trim($v) : $v);
 
-                $fg = WipSchedule::create([
-                    'item_number' => $cleaned['ITEM NUMBER'],
-                    'name'        => $cleaned['NAMA BARANG 1'],
-                    'keterangan'  => $cleaned['NAMA BARANG 2'],
-                    'quantity'    => (int) $cleaned['QTY'],
-                    'priority'    => (int) $cleaned['PRIORITY'],
+                $wip = WipSchedule::create([
+                    'name' => $cleaned['WIP_name'],
+                    'qty'  => $cleaned['WIP_qty'],
+                    'priority'  => $cleaned['WIP_priority'],
+                    'kategori'  => $cleaned['WIP_kategori'],
                 ]);
 
-                for ($j = 0; $j < (int) $cleaned['QTY']; $j++) {
+                for ($j = 0; $j < (int) $cleaned['WIP_qty']; $j++) {
                     Operator::create([
-                        'finish_good_schedule_id' => $fg->id,
+                        'wip_schedule_id' => $wip->id,
                         'status_production' => null,
                         'tanggal_selesai' => null,
                     ]);
@@ -84,7 +83,7 @@ class WipScheduleController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('finish_good_schedules.index')->with('success', 'Data berhasil diimport.');
+            return redirect()->route('wip_schedules.index')->with('success', 'Data berhasil diimport.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Import error: ' . $e->getMessage());
@@ -94,49 +93,48 @@ class WipScheduleController extends Controller
 
     public function clearAll(Request $request)
     {
-        $finishGoods = WipSchedule::with('operators')
+        $wips = WipSchedule::with('operators')
             ->whereNull('schedule_status')
             ->get();
 
-        foreach ($finishGoods as $finishGood) {
-            $finishGood->update(['schedule_status' => true]);
+        foreach ($wips as $wip) {
+            $wip->update(['schedule_status' => true]);
 
-            foreach ($finishGood->operators as $operator) {
+            foreach ($wip->operators as $operator) {
                 if ($operator->status_production !== true && $operator->status_production !== false) {
-                    $finishGood->operators()->whereNull('status_production')->delete();
+                    $wip->operators()->whereNull('status_production')->delete();
                     break;
                 }
             }
         }
 
-    return redirect()->route('finish_good_schedules.index')
+        return redirect()->route('wip_schedules.index')
                      ->with('success', 'Data berhasil dihapus');
     }
 
     public function deleteSelected(Request $request)
     {
-        $ids = $request->input('finish_good_schedule_ids', []);
+        $ids = $request->input('wip_schedule_ids', []);
 
         if (empty($ids)) {
-            return redirect()->route('finish_good_schedules.index')->with('error', 'Tidak ada data yang dipilih.');
+            return redirect()->route('wip_schedules.index')->with('error', 'Tidak ada data yang dipilih.');
         }
 
         WipSchedule::whereIn('id', $ids)->delete();
 
-        return redirect()->route('finish_good_schedules.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('wip_schedules.index')->with('success', 'Data berhasil dihapus.');
     }
 
     public function search(Request $request)
     {
         $keyword = $request->search;
 
-        $finish_good_schedules = WipSchedule::where('item_number', 'like', "%$keyword%")
-            ->orWhere('name', 'like', "%$keyword%")
-            ->orWhere('keterangan', 'like', "%$keyword%")
-            ->orWhere('quantity', 'like', "%$keyword%")
+        $wip_schedules = WipSchedule::where('name', 'like', "%$keyword%")
+            ->orWhere('qty', 'like', "%$keyword%")
+            ->orWhere('priority', 'like', "%$keyword%")
+            ->orWhere('kategori', 'like', "%$keyword%")
             ->paginate(10);
 
-        // return partial view
-        return view('finish_good_schedules._table', compact('finish_good_schedules'))->render();
+        return view('wip_schedules._table', compact('wip_schedules'))->render();
     }
 }

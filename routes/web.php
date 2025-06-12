@@ -9,10 +9,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkPlaceController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\BorderController;
 use App\Http\Controllers\FinishGoodScheduleController;
+use App\Http\Controllers\GussetController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\MattrasController;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\PanelController;
+use App\Http\Controllers\PocketController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RamController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\WipScheduleController;
 
@@ -47,6 +54,13 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         'locations' => LocationController::class,
         'maintenances' => MaintenanceController::class,
         'profiles' => ProfileController::class,
+        'operators' => OperatorController::class,
+        'mattras' => MattrasController::class,
+        'border' => BorderController::class,
+        'gusset' => GussetController::class,
+        'panel' => PanelController::class,
+        'pocket' => PocketController::class,
+        'ram' => RamController::class,
     ]);
 
     # profile
@@ -76,5 +90,9 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::post('/wip_schedules/import', [WipScheduleController::class, 'import'])->name('wip_schedules.import');
     Route::post('/wip_schedules/clear-all', [WipScheduleController::class, 'clearAll'])->name('wip_schedules.clearAll');
     Route::delete('/wip_schedules/delete-selected', [WipScheduleController::class, 'deleteSelected'])->name('wip_schedules.delete-selected');
+
+    Route::patch('/operators/{operator}/complete', [MattrasController::class, 'markComplete'])->name('operators.markComplete');
+    Route::patch('/operators/{operator}/pending', [MattrasController::class, 'markPending'])->name('operators.markPending');
+
 
 });

@@ -18,7 +18,6 @@ class FinishGoodScheduleController extends Controller
                                 ->paginate(10);
 
         return view('finish_good_schedules.index', compact('finish_good_schedules'));
-
     }
 
     public function create()

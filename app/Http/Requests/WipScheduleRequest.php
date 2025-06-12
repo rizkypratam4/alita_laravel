@@ -22,11 +22,10 @@ class WipScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item_number' => 'required|string|max:100',
             'name' => 'required|string|max:255',
-            'keterangan' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
+            'qty' => 'required|string|max:255',
             'priority' => 'required|in:1,2,3,4,5',
+            'kategori' => 'required|string',
         ];
     }
 }
