@@ -121,3 +121,33 @@
     </div>
         
 </x-layout>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var options = {
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            series: [{
+                name: 'Finish Good',
+                data: [{{ $weeklyFinishGood }}, {{ $monthlyFinishGood }}]
+            }, {
+                name: 'WIP',
+                data: [{{ $weeklyWip }}, {{ $monthlyWip }}]
+            }],
+            xaxis: {
+                categories: ['Mingguan', 'Bulanan']
+            },
+            title: {
+                text: 'Tren Penyelesaian Produksi'
+            },
+            colors: ['#28a745', '#007bff']
+        };
+
+        var chart = new ApexCharts(document.querySelector("#trendChart"), options);
+        chart.render();
+    });
+</script>

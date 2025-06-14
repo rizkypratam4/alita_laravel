@@ -16,7 +16,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        return view('dashboard', compact('user'), [
+        $productionTrend = $this->getProductionTrend();
+
+        return view('dashboard', array_merge(
+        compact('user'),
+        [
             'title' => 'Dashboard',
             'finishGoodTahunan' => $this->getFinishGoodTahunan(),
             'wipScheduleTahunan' => $this->getWipScheduleTahunan(),
@@ -26,7 +30,10 @@ class DashboardController extends Controller
             'wipHariIni' => $this->getWipHariIni(),
             'finishGoodHariIniList' => $this->getFinishGoodListHariIni(),
             'wipScheduleHariIniList' => $this->getWipScheduleHariIniList(),
-        ]);
+        ],
+        $this->getProductionTrend() 
+));
+
     }
 
     private function getFinishGoodTahunan()
@@ -116,9 +123,9 @@ class DashboardController extends Controller
 
     private function getWipScheduleHariIniList()
     {
-        $today = \Carbon\Carbon::today();
+        $today = Carbon::today();
 
-        $grouped = \App\Models\Operator::where('status_production', true)
+        $grouped = Operator::where('status_production', true)
             ->whereNotNull('wip_schedule_id')
             ->whereDate('created_at', $today)
             ->with('wipSchedule')
@@ -148,9 +155,33 @@ class DashboardController extends Controller
         return $paginator;
     }
 
-    private function getProductionTrendData()
+    private function getProductionTrend()
     {
+        $now = Carbon::now();
+        $oneWeekAgo = $now->copy()->subDays(7);
+        $oneMonthAgo = $now->copy()->subDays(30);
 
+        return [
+            'weeklyFinishGood' => Operator::whereNotNull('finish_good_schedule_id')
+                ->where('status_production', true)
+                ->whereBetween('updated_at', [$oneWeekAgo, $now])
+                ->count(),
+            
+            'weeklyWip' => Operator::whereNotNull('wip_schedule_id')
+                ->where('status_production', true)
+                ->whereBetween('updated_at', [$oneWeekAgo, $now])
+                ->count(),
+
+            'monthlyFinishGood' => Operator::whereNotNull('finish_good_schedule_id')
+                ->where('status_production', true)
+                ->whereBetween('updated_at', [$oneMonthAgo, $now])
+                ->count(),
+            
+            'monthlyWip' => Operator::whereNotNull('wip_schedule_id')
+                ->where('status_production', true)
+                ->whereBetween('updated_at', [$oneMonthAgo, $now])
+                ->count()
+        ];
     }
 
 
