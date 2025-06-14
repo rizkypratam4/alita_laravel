@@ -1,7 +1,7 @@
 <x-layout>
     <x-breadcrumb :title="'Operator Produksi'" />
 
-    @if (session('notice'))
+     @if (session('notice'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('notice') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -15,12 +15,11 @@
         </div>
     @endif
 
-
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-3">Operator Produksi</h5>
+                    <h5 class="card-title">Operator Produksi</h5>
                 </div>
 
                 <div class="card-body">
@@ -29,9 +28,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="text-nowrap">No</th>
-                                    <th scope="col" class="text-nowrap">Nama Barang 1</th>
-                                    <th scope="col" class="text-nowrap">Nama Barang 2</th>
-                                    <th scope="col" class="text-nowrap">Jam Upload</th>
+                                    <th scope="col" class="text-nowrap">Wip</th>
+                                    <th scope="col" class="text-nowrap">Jam upload</th>
                                     <th scope="col" class="text-nowrap">Priority</th>
                                     <th scope="col" class="text-nowrap text-center" colspan="2">Action</th>
                                 </tr>
@@ -42,10 +40,9 @@
                                         <td class="text-center" style="width: 2%; white-space: nowrap;">
                                             {{ $loop->iteration + ($operators->currentPage() - 1) * $operators->perPage() }}
                                         </td>
-                                        <td>{{ $operator->finishGoodSchedule->name }}</td>
-                                        <td>{{ $operator->finishGoodSchedule->keterangan ?? '-' }}</td>
+                                        <td>{{ $operator->wipSchedule->name ?? '-' }}</td>
                                         <td>
-                                            {{ $operator->finishGoodSchedule->created_at->format('H:i:s') }}
+                                            {{ optional($operator->wipSchedule->created_at)->format('H:i:s') ?? '-' }}
                                         </td>
                                         <td>
                                             @php
@@ -57,7 +54,7 @@
                                                     5 => 'Perorangan'
                                                 ];
                                             @endphp
-                                            {{ $priorityText[$operator->finishGoodSchedule->priority] ?? 'Tidak Diketahui' }}
+                                            {{ $priorityText[$operator->wipSchedule->priority] ?? 'Tidak Diketahui' }}
                                         </td>
                                         <td class="d-flex justify-content-center gap-2">
                                             <form method="POST" action="{{ route('operators.markComplete', $operator->id) }}">
