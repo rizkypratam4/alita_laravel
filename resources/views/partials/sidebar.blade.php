@@ -44,32 +44,6 @@
           />
 
           <li class="pc-item pc-caption">
-            <label>Information Technology</label>
-            <i class="ti ti-news"></i>
-          </li>
-
-          <x-sidebar-menu 
-            menuTitle="IT support" 
-            menuIcon="ti ti-bolt" 
-            :submenu="[
-                ['text' => 'IT Asset', 'url' => '#itAsset'],
-            ]" 
-            />
-
-          <li class="pc-item pc-caption">
-            <label>HR & GA</label>
-            <i class="ti ti-news"></i>
-          </li>
-
-          <x-sidebar-menu 
-          menuTitle="General affair" 
-          menuIcon="ti ti-ruler" 
-          :submenu="[
-              ['text' => 'GA Asset', 'url' => '#gaassets'],
-          ]" 
-          />
-
-          <li class="pc-item pc-caption">
             <label>Operation</label>
             <i class="ti ti-news"></i>
           </li>
@@ -81,7 +55,6 @@
               ['text' => 'FG Schedule', 'url' => '/finish_good_schedules'],
               ['text' => 'WIP Schedule', 'url' => '/wip_schedules'],
               ['text' => 'Operators', 'url' => '/operators'],
-              ['text' => 'Report', 'url' => '#report']
           ]" 
           />
 

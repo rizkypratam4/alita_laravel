@@ -26,10 +26,9 @@ class Operator extends Model
         });
     }
     
-    
     public function finishGoodSchedule()
     {
-        return $this->belongsTo(FinishGoodSchedule::class);
+        return $this->belongsTo(FinishGoodSchedule::class, 'finish_good_schedule_id', 'id');
     }
 
     public function wipSchedule()

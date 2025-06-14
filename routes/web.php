@@ -94,5 +94,9 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::patch('/operators/{operator}/complete', [MattrasController::class, 'markComplete'])->name('operators.markComplete');
     Route::patch('/operators/{operator}/pending', [MattrasController::class, 'markPending'])->name('operators.markPending');
 
+     # operator
+     Route::patch('/operators/{id}/mark-complete', [OperatorController::class, 'markComplete'])->name('operators.markComplete');
+
+
 
 });
