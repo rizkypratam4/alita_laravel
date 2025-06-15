@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('phone')->nullable();
             $table->string('company')->nullable();
+            $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->string('job_title')->nullable();
             $table->string('direct_superior')->nullable();
