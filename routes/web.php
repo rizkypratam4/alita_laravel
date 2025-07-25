@@ -68,6 +68,9 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/profiles/{profile}/edit-work', [ProfileController::class, 'editWork'])->name('profiles.edit.work');
     Route::put('/profiles/{profile}/work', [ProfileController::class, 'updateWorkExperience'])->name('profiles.update.work');
     Route::put('/profiles/{profile}/info', [ProfileController::class, 'updateUserInfo'])->name('profiles.update.info');
+    Route::post('/profiles/image', [ProfileController::class, 'updateImage'])->name('profiles.update.image');
+    Route::get('/profiles/{profile}/edit-password', [ProfileController::class, 'editPassword'])->name('profiles.edit.password');
+    Route::put('/profiles/{profile}/change-password', [ProfileController::class, 'changePassword'])->name('profiles.change.password');
 
     # maintenance
     Route::get('/maintenances/{id}/specification', [MaintenanceController::class, 'specification'])->name('maintenances.specification');
@@ -94,9 +97,6 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::patch('/operators/{operator}/complete', [MattrasController::class, 'markComplete'])->name('operators.markComplete');
     Route::patch('/operators/{operator}/pending', [MattrasController::class, 'markPending'])->name('operators.markPending');
 
-     # operator
-     Route::patch('/operators/{id}/mark-complete', [OperatorController::class, 'markComplete'])->name('operators.markComplete');
-
-
-
+    # operator
+    Route::patch('/operators/{id}/mark-complete', [OperatorController::class, 'markComplete'])->name('operators.markComplete');
 });

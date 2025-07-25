@@ -26,6 +26,6 @@ class MachineSpecificationRequest extends FormRequest
             'specs' => 'required|array|min:1',
             'specs.*.name' => 'required|string|max:255',
             'specs.*.value' => 'required|string|max:255',
-        ];   
+        ];
     }
 }

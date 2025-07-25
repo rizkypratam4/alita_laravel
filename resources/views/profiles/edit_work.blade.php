@@ -8,7 +8,7 @@
 
                 {{-- Form User Info --}}
                 @include('profiles._form_work_experience', ['user' => $user])
-                
+
                 <div class="mt-4">
                     <button type="submit" class="btn btn-success btn-sm">
                         <i class="fas fa-save"></i> Simpan

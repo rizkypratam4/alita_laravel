@@ -6,12 +6,12 @@
 <x-layout>
     <x-breadcrumb :title="'Dashboard'" />
     <div class="row">
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <h6 class="mb-2 f-w-400 text-muted">Finish Good Tahunan</h6>
-                <h4 class="mb-3">{{ number_format($finishGoodTahunan) }}</h4>
-                <p class="mb-0 text-muted text-sm">Jumlah barang jadi yang selesai dalam 1 tahun terakhir</p>
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="mb-2 f-w-400 text-muted">Finish Good Tahunan</h6>
+                    <h4 class="mb-3">{{ number_format($finishGoodTahunan) }}</h4>
+                    <p class="mb-0 text-muted text-sm">Jumlah barang jadi yang selesai dalam 1 tahun terakhir</p>
                 </div>
             </div>
         </div>

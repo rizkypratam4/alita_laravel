@@ -14,7 +14,7 @@ class AreaRequest extends FormRequest
         return true;
     }
 
-    /**
+    /** 
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -23,7 +23,7 @@ class AreaRequest extends FormRequest
     {
         $page_id = $this->route('areas')?->id;
 
-        if ($this->isMethod('post')){
+        if ($this->isMethod('post')) {
             return [
                 'code' => 'required|string|max:10|unique:areas,code',
                 'name' => 'required|string|max:255|unique:areas,name'
@@ -36,6 +36,7 @@ class AreaRequest extends FormRequest
                 'name' => 'required|string|max:255' . $page_id
             ];
         }
+
         return [];
     }
 }
