@@ -116,7 +116,36 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var options = {
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                series: [{
+                        name: 'Finish Good',
+                        data: @json([$weeklyFinishGood, $monthlyFinishGood])
+                    },
+                    {
+                        name: 'WIP',
+                        data: @json([$weeklyWip, $monthlyWip])
+                    }
+                ],
+                xaxis: {
+                    categories: ['Mingguan', 'Bulanan']
+                },
+                title: {
+                    text: 'Tren Penyelesaian Produksi'
+                },
+                colors: ['#28a745', '#007bff']
+            };
+
+            var chart = new ApexCharts(document.querySelector("#trendChart"), options);
+            chart.render();
+        });
+    </script>
 
 </x-layout>

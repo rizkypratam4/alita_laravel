@@ -51,16 +51,16 @@
 
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
     @if (Route::currentRouteName() != 'login')
-        @include('partials.sidebar')
-        @include('partials.header')
-        <div class="pc-container">
-            <div class="pc-content">
-                {{ $slot }}
-            </div>
+    @include('partials.sidebar')
+    @include('partials.header')
+    <div class="pc-container">
+        <div class="pc-content">
+            {{ $slot }}
         </div>
-        @include('partials.footer')
+    </div>
+    @include('partials.footer')
     @else
-        {{ $slot }}
+    {{ $slot }}
     @endif
 
 
@@ -69,6 +69,7 @@
     <script src="{{ asset('assets/js/pages/dashboard-default.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
 
     <!-- [Page Specific JS] end -->
