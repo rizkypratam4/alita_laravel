@@ -2,15 +2,22 @@
     <x-breadcrumb :title="'Operator Produksi'" />
 
     @if (session('notice'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('notice') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('notice') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
 
     @if (session('alert'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('alert') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('pending'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('pending') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -51,17 +58,26 @@
                                                     2 => 'Urgent',
                                                     3 => 'Normal',
                                                     4 => 'Luar Kota',
-                                                    5 => 'Perorangan'
+                                                    5 => 'Perorangan',
                                                 ];
                                             @endphp
                                             {{ $priorityText[$operator->wipSchedule->priority] ?? 'Tidak Diketahui' }}
                                         </td>
                                         <td class="d-flex justify-content-center gap-2">
-                                            <form method="POST" action="{{ route('operators.markComplete', $operator->id) }}">
+                                            <form method="POST"
+                                                action="{{ route('operators.markComplete', $operator->id) }}">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="fa fa-check-circle me-1"></i> Selesai
+                                                </button>
+                                            </form>
+                                            <form method="POST"
+                                                action="{{ route('operators.markPending', $operator->id) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-warning">
+                                                    <i class="fa fa-check-circle me-1"></i> Pending
                                                 </button>
                                             </form>
                                         </td>

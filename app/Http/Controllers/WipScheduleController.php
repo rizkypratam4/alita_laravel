@@ -7,6 +7,7 @@ use App\Models\WipSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\WipScheduleRequest;
 
@@ -15,8 +16,10 @@ class WipScheduleController extends Controller
     public function index()
     {
         $wip_schedules = WipSchedule::whereNull('schedule_status')
-                                ->orderBy('priority', 'asc')
-                                ->paginate(10);
+            ->where('area_id', Auth::user()->area_id)
+            ->where('work_place_id', Auth::user()->work_place_id)
+            ->orderBy('priority', 'asc')
+            ->paginate(10);
 
         return view('wip_schedules.index', compact('wip_schedules'));
     }
@@ -30,7 +33,11 @@ class WipScheduleController extends Controller
     {
         try {
             $validated = $request->validated();
+            $validated['area_id'] = Auth::user()->area_id;
+            $validated['work_place_id'] = Auth::user()->work_place_id;
+
             $wip = WipSchedule::create($validated);
+
 
             for ($i = 0; $i < $wip->qty; $i++) {
                 Operator::create([
@@ -39,10 +46,10 @@ class WipScheduleController extends Controller
             }
 
             return redirect()->route('wip_schedules.index')
-                            ->with('success', 'Data berhasil disimpan dan operator telah dibuat.');
+                ->with('success', 'Data berhasil disimpan dan operator telah dibuat.');
         } catch (\Exception $e) {
             return back()->withInput()
-                         ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
+                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
         }
     }
 
@@ -60,6 +67,7 @@ class WipScheduleController extends Controller
             $header = $data[0];
 
             DB::beginTransaction();
+            $user = Auth::user();
 
             for ($i = 1; $i < $data->count(); $i++) {
                 $row = array_combine($header->toArray(), $data[$i]->toArray());
@@ -71,6 +79,8 @@ class WipScheduleController extends Controller
                     'qty'  => $cleaned['WIP_qty'],
                     'priority'  => $cleaned['WIP_priority'],
                     'kategori'  => $cleaned['WIP_kategori'],
+                    'area_id' => $user->area_id,
+                    'work_place_id' => $user->work_place_id,
                 ]);
 
                 for ($j = 0; $j < (int) $cleaned['WIP_qty']; $j++) {
@@ -109,7 +119,7 @@ class WipScheduleController extends Controller
         }
 
         return redirect()->route('wip_schedules.index')
-                     ->with('success', 'Data berhasil dihapus');
+            ->with('success', 'Data berhasil dihapus');
     }
 
     public function deleteSelected(Request $request)

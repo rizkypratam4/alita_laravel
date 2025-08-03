@@ -96,9 +96,8 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::post('/wip_schedules/clear-all', [WipScheduleController::class, 'clearAll'])->name('wip_schedules.clearAll');
     Route::delete('/wip_schedules/delete-selected', [WipScheduleController::class, 'deleteSelected'])->name('wip_schedules.delete-selected');
 
-    Route::patch('/operators/{operator}/complete', [MattrasController::class, 'markComplete'])->name('operators.markComplete');
-    Route::patch('/operators/{operator}/pending', [MattrasController::class, 'markPending'])->name('operators.markPending');
 
     # operator
     Route::patch('/operators/{id}/mark-complete', [OperatorController::class, 'markComplete'])->name('operators.markComplete');
+    Route::patch('/operators/{id}/mark-pending', [OperatorController::class, 'markPending'])->name('operators.markPending');
 });

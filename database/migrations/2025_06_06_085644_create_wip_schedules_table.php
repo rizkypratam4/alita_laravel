@@ -18,12 +18,14 @@ return new class extends Migration
             $table->integer('priority');
             $table->string('kategori');
             $table->boolean('schedule_status')->nullable();
+            $table->foreignId('area_id')->constrained();
+            $table->foreignId('work_place_id')->constrained();
             $table->unsignedBigInteger('creator_id')->nullable();
             $table->unsignedBigInteger('updater_id')->nullable();
-            
+
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('updater_id')->references('id')->on('users')->onDelete('set null');
-            
+
             $table->timestamps();
         });
     }

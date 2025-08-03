@@ -35,4 +35,26 @@ class OperatorController extends Controller
             return redirect()->back()->with('alert', 'Gagal menyelesaikan produksi.');
         }
     }
+
+    public function markPending(string $id)
+    {
+        $operator = Operator::find($id);
+
+        if (!$operator) {
+            return redirect()->back()->with('alert', 'Data operator tidak ditemukan.');
+        }
+
+        $updated = $operator->update([
+            'status_production' => false,
+            'tanggal_selesai' => now(),
+            'waktu_selesai' => now(),
+            'creator_id' => Auth::id(),
+        ]);
+
+        if ($updated) {
+            return redirect()->back()->with('pending', 'Produksi pending, data telah alihkan ke halaman reschedule.');
+        } else {
+            return redirect()->back()->with('alert', 'Gagal menyelesaikan produksi.');
+        }
+    }
 }

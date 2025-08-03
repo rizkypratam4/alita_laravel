@@ -26,19 +26,24 @@
                             @switch($wip->priority)
                                 @case(1)
                                     Top Urgent
-                                    @break
+                                @break
+
                                 @case(2)
                                     Urgent
-                                    @break
+                                @break
+
                                 @case(3)
                                     Normal
-                                    @break
+                                @break
+
                                 @case(4)
                                     Luar Kota
-                                    @break
+                                @break
+
                                 @case(5)
                                     Perorangan
-                                    @break
+                                @break
+
                                 @default
                                     Tidak Diketahui
                             @endswitch
@@ -53,7 +58,8 @@
         <a href="{{ route('wip_schedules.create') }}" class="btn btn-success btn-sm me-2 text-white">
             <i class="fas fa-plus"></i> Add
         </a>
-        <button type="submit" class="btn btn-danger btn-sm text-white me-auto" onclick="return confirm('Yakin ingin menghapus data yang dipilih?');">
+        <button type="submit" class="btn btn-danger btn-sm text-white me-auto"
+            onclick="return confirm('Yakin ingin menghapus data yang dipilih?');">
             <i class="fas fa-trash"></i> Delete
         </button>
 
@@ -63,11 +69,10 @@
     </div>
 </form>
 
-t
+
 <script>
-    document.getElementById('select_all_wip').addEventListener('change', function () {
+    document.getElementById('select_all_wip').addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('input[name="wip_schedule_ids[]"]');
         checkboxes.forEach(cb => cb.checked = this.checked);
     });
 </script>
-
