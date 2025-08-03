@@ -4,19 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Operator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PanelController extends Controller
 {
     public function index(Request $request)
     {
         $operators = Operator::with('wipSchedule')
-                                ->leftJoin('wip_schedules', 'operators.wip_schedule_id', '=', 'wip_schedules.id')
-                                ->whereNull('operators.status_production')
-                                ->where('wip_schedules.kategori', 'panel')
-                                ->orderBy('wip_schedules.priority', 'asc')
-                                ->orderBy('wip_schedules.name', 'asc')
-                                ->select('operators.*')
-                                ->paginate(10);
+            ->leftJoin('wip_schedules', 'operators.wip_schedule_id', '=', 'wip_schedules.id')
+            ->whereNull('operators.status_production')
+            ->where('wip_schedules.kategori', 'panel')
+            ->where('finish_good_schedules.area_id', Auth::user()->area_id)
+            ->where('finish_good_schedules.work_place_id', Auth::user()->work_place_id)
+            ->orderBy('wip_schedules.priority', 'asc')
+            ->orderBy('wip_schedules.name', 'asc')
+            ->select('operators.*')
+            ->paginate(10);
 
         return view('operators.panel', compact('operators'));
     }

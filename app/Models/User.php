@@ -17,6 +17,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
     protected $fillable = [
         'name',
         'email',
@@ -60,22 +61,26 @@ class User extends Authenticatable
         return 'username';
     }
 
-    public function departement() {
+    public function departement()
+    {
         return $this->belongsTo(Departement::class, 'departement_id');
     }
 
-    public function division() {
+    public function division()
+    {
         return $this->belongsTo(Division::class, 'division_id');
     }
 
-    public function workPlace() {
+    public function workPlace()
+    {
         return $this->belongsTo(WorkPlace::class, 'work_place_id');
     }
 
-    public function area() {
+    public function area()
+    {
         return $this->belongsTo(Area::class, 'area_id');
     }
-    
+
     public function assetMutations()
     {
         return $this->hasMany(AssetMutation::class);

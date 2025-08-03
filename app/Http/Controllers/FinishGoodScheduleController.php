@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FinishGoodScheduleRequest;
 use App\Models\Operator;
 use Illuminate\Http\Request;
 use App\Models\FinishGoodSchedule;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\FinishGoodScheduleRequest;
 
 class FinishGoodScheduleController extends Controller
 {
     public function index()
     {
         $finish_good_schedules = FinishGoodSchedule::whereNull('schedule_status')
-            ->where('area_id', auth()->user()->area_id)
-            ->where('work_place_id', auth()->user()->work_place_id)
+            ->where('area_id', Auth::user()->area_id)
+            ->where('work_place_id', Auth::user()->work_place_id)
             ->orderBy('priority', 'asc')
             ->paginate(10);
 
@@ -34,10 +35,10 @@ class FinishGoodScheduleController extends Controller
         try {
             $validated = $request->validated();
 
-            $validated['area_id'] = auth()->user()->area_id;
-            $validated['work_place_id'] = auth()->user()->work_place_id;
+            $validated['area_id'] = Auth::user()->area_id;
+            $validated['work_place_id'] = Auth::user()->work_place_id;
 
-            if (!auth()->user()->area_id || !auth()->user()->work_place_id) {
+            if (!Auth::user()->area_id || !Auth::user()->work_place_id) {
                 return back()->withInput()
                     ->withErrors(['error' => 'User belum memiliki area atau work place. Silakan lengkapi data user.']);
             }
@@ -73,6 +74,8 @@ class FinishGoodScheduleController extends Controller
 
             DB::beginTransaction();
 
+            $user = Auth::user();
+
             for ($i = 1; $i < $data->count(); $i++) {
                 $row = array_combine($header->toArray(), $data[$i]->toArray());
 
@@ -84,6 +87,8 @@ class FinishGoodScheduleController extends Controller
                     'keterangan'  => $cleaned['NAMA BARANG 2'],
                     'quantity'    => (int) $cleaned['QTY'],
                     'priority'    => (int) $cleaned['PRIORITY'],
+                    'area_id'    => $user->area_id,
+                    'work_place_id' => $user->work_place_id,
                 ]);
 
                 for ($j = 0; $j < (int) $cleaned['QTY']; $j++) {

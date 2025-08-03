@@ -10,6 +10,7 @@ class OperatorController extends Controller
 {
     public function index()
     {
+
         return view('operators.index');
     }
 
@@ -34,5 +35,4 @@ class OperatorController extends Controller
             return redirect()->back()->with('alert', 'Gagal menyelesaikan produksi.');
         }
     }
-
 }
