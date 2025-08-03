@@ -9,13 +9,16 @@ use App\Models\FinishGoodSchedule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+
 class FinishGoodScheduleController extends Controller
 {
     public function index()
     {
         $finish_good_schedules = FinishGoodSchedule::whereNull('schedule_status')
-                                ->orderBy('priority', 'asc')
-                                ->paginate(10);
+            ->where('area_id', auth()->user()->area_id)
+            ->where('work_place_id', auth()->user()->work_place_id)
+            ->orderBy('priority', 'asc')
+            ->paginate(10);
 
         return view('finish_good_schedules.index', compact('finish_good_schedules'));
     }
@@ -30,6 +33,15 @@ class FinishGoodScheduleController extends Controller
     {
         try {
             $validated = $request->validated();
+
+            $validated['area_id'] = auth()->user()->area_id;
+            $validated['work_place_id'] = auth()->user()->work_place_id;
+
+            if (!auth()->user()->area_id || !auth()->user()->work_place_id) {
+                return back()->withInput()
+                    ->withErrors(['error' => 'User belum memiliki area atau work place. Silakan lengkapi data user.']);
+            }
+
             $finishGood = FinishGoodSchedule::create($validated);
 
             for ($i = 0; $i < $finishGood->quantity; $i++) {
@@ -39,10 +51,10 @@ class FinishGoodScheduleController extends Controller
             }
 
             return redirect()->route('finish_good_schedules.index')
-                            ->with('success', 'Data berhasil disimpan dan operator telah dibuat.');
+                ->with('success', 'Data berhasil disimpan dan operator telah dibuat.');
         } catch (\Exception $e) {
             return back()->withInput()
-                        ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
+                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
         }
     }
 
@@ -109,8 +121,8 @@ class FinishGoodScheduleController extends Controller
             }
         }
 
-    return redirect()->route('finish_good_schedules.index')
-                     ->with('success', 'Data berhasil dihapus');
+        return redirect()->route('finish_good_schedules.index')
+            ->with('success', 'Data berhasil dihapus');
     }
 
     public function deleteSelected(Request $request)
@@ -139,5 +151,4 @@ class FinishGoodScheduleController extends Controller
         // return partial view
         return view('finish_good_schedules._table', compact('finish_good_schedules'))->render();
     }
-
 }

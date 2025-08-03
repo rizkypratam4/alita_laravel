@@ -8,19 +8,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class FinishGoodSchedule extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
-        'item_number', 
-        'name', 
-        'keterangan', 
-        'quantity', 
-        'priority', 
-        'schedule_status', 
-        'creator_id', 
+        'item_number',
+        'name',
+        'keterangan',
+        'quantity',
+        'priority',
+        'schedule_status',
+        'area_id',
+        'work_place_id',
+        'creator_id',
         'updater_id'
     ];
 
-    protected static function booted(){
+    protected static function booted()
+    {
         static::creating(function ($model) {
             $model->created_at = $model->freshTimestamp();
             $model->updated_at = null;
@@ -31,6 +34,4 @@ class FinishGoodSchedule extends Model
     {
         return $this->hasMany(Operator::class);
     }
-
-
 }

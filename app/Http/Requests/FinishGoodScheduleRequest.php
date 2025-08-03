@@ -22,10 +22,11 @@ class FinishGoodScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'item_number' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'qty' => 'required|integer|min:1',
+            'keterangan' => 'nullable|string|max:255',
+            'quantity' => 'required|integer|min:1',
             'priority' => 'required|in:1,2,3,4,5',
         ];
     }
-
 }

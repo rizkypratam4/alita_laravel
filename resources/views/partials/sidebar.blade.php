@@ -95,6 +95,7 @@
               ['text' => 'FG Schedule', 'url' => '/finish_good_schedules'],
               ['text' => 'WIP Schedule', 'url' => '/wip_schedules'],
               ['text' => 'Operators', 'url' => '/operators'],
+              ['text' => 'Production report', 'url' => '/production_reports'],
           ]" />
 
          <x-sidebar-menu
@@ -103,7 +104,6 @@
            :submenu="[
               ['text' => 'MTC Asset', 'url' => '/maintenances'],
           ]" />
-
        </ul>
      </div>
    </div>

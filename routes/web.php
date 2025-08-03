@@ -1,27 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RamController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\PanelController;
+use App\Http\Controllers\BorderController;
+use App\Http\Controllers\GussetController;
+use App\Http\Controllers\PocketController;
+use App\Http\Controllers\MattrasController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkPlaceController;
 use App\Http\Controllers\DepartementController;
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\BorderController;
-use App\Http\Controllers\FinishGoodScheduleController;
-use App\Http\Controllers\GussetController;
-use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceController;
-use App\Http\Controllers\MattrasController;
-use App\Http\Controllers\OperatorController;
-use App\Http\Controllers\PanelController;
-use App\Http\Controllers\PocketController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RamController;
-use App\Http\Controllers\TypeController;
 use App\Http\Controllers\WipScheduleController;
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ProductionReportController;
+use App\Http\Controllers\FinishGoodScheduleController;
 
 # auth
 Route::get('/', [AuthenticationController::class, 'index'])->name('login');
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         'panel' => PanelController::class,
         'pocket' => PocketController::class,
         'ram' => RamController::class,
+        'production_reports' => ProductionReportController::class,
     ]);
 
     # profile
