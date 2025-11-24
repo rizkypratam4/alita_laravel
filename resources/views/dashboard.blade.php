@@ -68,14 +68,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($finishGoodHariIniList as $item)
-                                    <tr>
-                                        <td class="text-nowrap">{{ $item['item_number'] }}</td>
-                                        <td class="text-nowrap">{{ $item['name'] }}</td>
-                                        <td class="text-center">{{ number_format($item['total_amount']) }}</td>
-                                    </tr>
-                                @endforeach
+                                @forelse ($finishGoodHariIniList as $item)
+                                <tr>
+                                    <td class="text-nowrap">{{ $item->item_number }}</td>
+                                    <td class="text-nowrap">{{ $item->name }}</td>
+                                    <td class="text-center">{{ number_format($item->total_amount) }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">Tidak ada data finish good hari ini</td>
+                                </tr>
+                                @endforelse
                             </tbody>
+
+                            {{ $finishGoodHariIniList->links('pagination::bootstrap-4') }}
+
                         </table>
                     </div>
                 </div>
@@ -97,15 +104,15 @@
                             </thead>
                             <tbody>
                                 @forelse ($wipScheduleHariIniList as $item)
-                                    <tr>
-                                        <td>{{ $item['name'] }}</td>
-                                        <td>{{ $item['kategori'] }}</td>
-                                        <td class="text-center">{{ number_format($item['total_amount']) }}</td>
-                                    </tr>
+                                <tr>
+                                    <td class="text-nowrap">{{ $item->name }}</td>
+                                    <td class="text-nowrap">{{ $item->kategori }}</td>
+                                    <td class="text-center">{{ number_format($item->total_amount) }}</td>
+                                </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="3" class="text-center">Tidak ada data hari ini.</td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="3" class="text-center">Tidak ada data hari ini.</td>
+                                </tr>
                                 @endforelse
                             </tbody>
                         </table>

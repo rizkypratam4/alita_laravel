@@ -22100,6 +22100,7 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
   display: flex;
   align-self: center;
   justify-content: center;
+  flex-direction: column;
 }
 .auth-main .auth-wrapper .saprator:after {
   content: "";

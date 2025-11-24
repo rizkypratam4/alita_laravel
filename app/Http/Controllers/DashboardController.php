@@ -19,21 +19,20 @@ class DashboardController extends Controller
         $productionTrend = $this->getProductionTrend();
 
         return view('dashboard', array_merge(
-        compact('user'),
-        [
-            'title' => 'Dashboard',
-            'finishGoodTahunan' => $this->getFinishGoodTahunan(),
-            'wipScheduleTahunan' => $this->getWipScheduleTahunan(),
-            'totalUsers' => $this->getTotalUsers(),
-            'totalMesinProduksi' => $this->getTotalMesinProduksi(),
-            'finishGoodHariIni' => $this->getFinishGoodHariIni(),
-            'wipHariIni' => $this->getWipHariIni(),
-            'finishGoodHariIniList' => $this->getFinishGoodListHariIni(),
-            'wipScheduleHariIniList' => $this->getWipScheduleHariIniList(),
-        ],
-        $this->getProductionTrend() 
-));
-
+            compact('user'),
+            [
+                'title' => 'Dashboard',
+                'finishGoodTahunan' => $this->getFinishGoodTahunan(),
+                'wipScheduleTahunan' => $this->getWipScheduleTahunan(),
+                'totalUsers' => $this->getTotalUsers(),
+                'totalMesinProduksi' => $this->getTotalMesinProduksi(),
+                'finishGoodHariIni' => $this->getFinishGoodHariIni(),
+                'wipHariIni' => $this->getWipHariIni(),
+                'finishGoodHariIniList' => $this->getFinishGoodListHariIni(),
+                'wipScheduleHariIniList' => $this->getWipScheduleHariIniList(),
+            ],
+            $this->getProductionTrend()
+        ));
     }
 
     private function getFinishGoodTahunan()
@@ -72,9 +71,10 @@ class DashboardController extends Controller
 
         return Operator::where('status_production', true)
             ->whereNotNull('finish_good_schedule_id')
-            ->whereDate('created_at', $today)
-            ->count('finish_good_schedule_id');
+            ->whereDate('tanggal_selesai', $today)
+            ->count();
     }
+
 
     private function getWipHariIni()
     {
@@ -82,31 +82,31 @@ class DashboardController extends Controller
 
         return Operator::where('status_production', true)
             ->whereNotNull('wip_schedule_id')
-            ->whereDate('created_at', $today)
+            ->whereDate('tanggal_selesai', $today)
             ->count('wip_schedule_id');
     }
-    
+
     private function getFinishGoodListHariIni()
     {
         $today = Carbon::today();
 
         $grouped = Operator::where('status_production', true)
             ->whereNotNull('finish_good_schedule_id')
-            ->whereDate('created_at', $today)
+            ->whereDate('tanggal_selesai', $today)
             ->with('finishGoodSchedule')
             ->get()
             ->groupBy('finish_good_schedule_id')
             ->map(function ($group) {
                 $first = $group->first();
-                return [
+                return (object) [
                     'item_number' => $first->finishGoodSchedule->item_number ?? '-',
                     'name' => $first->finishGoodSchedule->name ?? '-',
-                    'keterangan' => $first->finishGoodSchedule->keterangan ?? '-',
-                    'status_production' => $first->status_production ? 'Selesai' : 'Pending',
                     'total_amount' => $group->count(),
                 ];
             })
+
             ->values();
+
 
         $perPage = 10;
         $currentPage = request()->input('page_finish', 1);
@@ -121,19 +121,20 @@ class DashboardController extends Controller
         );
     }
 
+
     private function getWipScheduleHariIniList()
     {
         $today = Carbon::today();
 
         $grouped = Operator::where('status_production', true)
             ->whereNotNull('wip_schedule_id')
-            ->whereDate('created_at', $today)
+            ->whereDate('tanggal_selesai', $today)
             ->with('wipSchedule')
             ->get()
             ->groupBy('wip_schedule_id')
             ->map(function ($group) {
                 $first = $group->first();
-                return [
+                return (object) [
                     'name' => $first->wipSchedule->name ?? '-',
                     'kategori' => $first->wipSchedule->kategori ?? '-',
                     'total_amount' => $group->count(),
@@ -144,16 +145,16 @@ class DashboardController extends Controller
         $perPage = 10;
         $currentPage = request()->input('page', 1);
         $pagedData = $grouped->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $paginator = new LengthAwarePaginator(
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
             $pagedData,
             $grouped->count(),
             $perPage,
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-
-        return $paginator;
     }
+
 
     private function getProductionTrend()
     {
@@ -166,7 +167,7 @@ class DashboardController extends Controller
                 ->where('status_production', true)
                 ->whereBetween('updated_at', [$oneWeekAgo, $now])
                 ->count(),
-            
+
             'weeklyWip' => Operator::whereNotNull('wip_schedule_id')
                 ->where('status_production', true)
                 ->whereBetween('updated_at', [$oneWeekAgo, $now])
@@ -176,13 +177,11 @@ class DashboardController extends Controller
                 ->where('status_production', true)
                 ->whereBetween('updated_at', [$oneMonthAgo, $now])
                 ->count(),
-            
+
             'monthlyWip' => Operator::whereNotNull('wip_schedule_id')
                 ->where('status_production', true)
                 ->whereBetween('updated_at', [$oneMonthAgo, $now])
                 ->count()
         ];
     }
-
-
 }
