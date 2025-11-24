@@ -1,32 +1,21 @@
 # Gunakan PHP FPM resmi
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 # Install dependencies untuk GD dan PHP extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    libwebp-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# ... bagian awal Dockerfile Anda
 
-# Set working directory
-WORKDIR /var/www/html
+# Perintah ini adalah standar jika Anda menggunakan image resmi PHP
+RUN docker-php-ext-configure gd --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) gd
 
-# Copy semua file project
-COPY . .
-
-# Install Composer dependencies
-RUN composer install --optimize-autoloader --no-interaction --no-scripts
-
-# Expose port Laravel
-EXPOSE 8000
-
-# Jalankan Laravel
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# ... perintah selanjutnya (COPY, WORKDIR, RUN composer install)
+# Pastikan `composer install` dijalankan setelah ekstensi terinstal.
+RUN composer install --optimize-autoloader --no-scripts --no-interaction
+# ...
