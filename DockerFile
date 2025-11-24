@@ -1,21 +1,15 @@
-# Gunakan PHP FPM resmi
-FROM php:8.4-fpm
+# 1. Pastikan Anda menggunakan PHP 8.3 (Memecahkan Masalah 1)
+FROM php:8.3-fpm-alpine
 
-# Install dependencies untuk GD dan PHP extensions
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libwebp-dev \
-    zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
+# 2. Instal GD (Memecahkan Masalah 2)
+# Khusus Alpine:
+RUN apk add --no-cache libpng-dev libjpeg-dev libwebp-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-webp \
+    && docker-php-ext-install gd \
+    && apk del libpng-dev libjpeg-dev libwebp-dev
 
-# ... bagian awal Dockerfile Anda
-
-# Perintah ini adalah standar jika Anda menggunakan image resmi PHP
-RUN docker-php-ext-configure gd --with-jpeg --with-webp \
-    && docker-php-ext-install -j$(nproc) gd
-
-# ... perintah selanjutnya (COPY, WORKDIR, RUN composer install)
-# Pastikan `composer install` dijalankan setelah ekstensi terinstal.
+# ...
+# 3. Jalankan Composer
+COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --no-scripts --no-interaction
 # ...
