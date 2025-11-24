@@ -1,14 +1,17 @@
-# Base image PHP
+# Gunakan PHP FPM resmi
 FROM php:8.2-fpm
 
-# Install system dependencies dan GD
+# Install dependencies untuk GD dan PHP extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    zip \
+    unzip \
+    git \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo pdo_mysql
+    && docker-php-ext-install gd pdo pdo_mysql
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -16,14 +19,14 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy semua file project
 COPY . .
 
-# Install composer dependencies
-RUN composer install --optimize-autoloader --no-interaction
+# Install Composer dependencies
+RUN composer install --optimize-autoloader --no-interaction --no-scripts
 
-# Expose port untuk Laravel serve
+# Expose port Laravel
 EXPOSE 8000
 
-# Jalankan artisan serve
+# Jalankan Laravel
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
